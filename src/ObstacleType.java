@@ -1,5 +1,5 @@
 public enum ObstacleType {
-    Destructible,
-    Indestructible,
-    PlayerBase,
+    DESTRUCTIBLE,
+    INDESTRUCTIBLE,
+    PLAYER_BASE,
 }

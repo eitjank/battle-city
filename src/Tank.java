@@ -1,34 +1,24 @@
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Tank {
-    int x;
-    int y;
-    int dx = 0;
-    int dy = 0;
-    private int width;
-    private int height;
+public class Tank extends GameObject {
+    private int dx = 0;
+    private int dy = 0;
     private Direction direction = Direction.UP;
     private int speed;
     private final int bulletSpeed = 10;
     private static final int FIRE_COOLDOWN = 15;
     private int currentFireCooldown = 0;
     private PlayerType playerType;
-    ArrayList<Missile> missiles = new ArrayList<>();
+    private List<Missile> missiles = new ArrayList<>();
 
     public Tank(int x, int y, int width, int height, int speed, PlayerType playerType) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        super(x,y,width,height);
         this.speed = speed;
         this.playerType = playerType;
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
 
     public int[] getCenter() {
         return new int[]{x + width / 2, y + height / 2};
@@ -48,11 +38,13 @@ public class Tank {
         x += dx;
         y += dy;
     }
+
     public void fire() {
         if (currentFireCooldown > 0) {
             return;
         }
-        int missileDx, missileDy;
+        int missileDx;
+        int missileDy;
         switch (direction) {
             case LEFT -> {
                 missileDx = -bulletSpeed;
@@ -73,7 +65,7 @@ public class Tank {
             default -> throw new IllegalStateException("Unexpected value: " + direction);
         }
         int[] center = getCenter();
-        missiles.add(new Missile(center[0] - Missile.size / 2, center[1] - Missile.size / 2, missileDx, missileDy));
+        missiles.add(new Missile(center[0] - Missile.SIZE / 2, center[1] - Missile.SIZE / 2, missileDx, missileDy));
         currentFireCooldown = FIRE_COOLDOWN;
     }
 
@@ -132,20 +124,24 @@ public class Tank {
 
     }
 
-    public int getX() {
-        return x;
+    public int getDx() {
+        return dx;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setDx(int dx) {
+        this.dx = dx;
     }
 
-    public int getY() {
-        return y;
+    public int getDy() {
+        return dy;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
+
+    public List<Missile> getMissiles() {
+        return missiles;
     }
 
     public int getSpeed() {

@@ -1,17 +1,17 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class AITankController {
 
-    public int nTanksToSpawn = 18;
-    private final int MAX_TANKS = 4;
-    private ArrayList<Tank> tanks;
+    private int nTanksToSpawn = 18;
+    private static final int MAX_TANKS = 4;
+    private List<Tank> tanks;
     private final Random random = new Random();
 
-    private static final int SPAWN_COOLDOWN = 100;
+    private static final int SPAWN_COOLDOWN = 80;
     private int currentSpawnCooldown = SPAWN_COOLDOWN;
 
-    public AITankController(ArrayList<Tank> tanks) {
+    public AITankController(List<Tank> tanks) {
         this.tanks = tanks;
     }
 
@@ -24,7 +24,8 @@ public class AITankController {
             }
             currentSpawnCooldown = SPAWN_COOLDOWN;
             if (random.nextInt(2)==1) {
-                int spawnX, spawnY;
+                int spawnX;
+                int spawnY;
                 int randomNumber = random.nextInt(4);
                 switch (randomNumber) {
                     case 0 -> {
@@ -74,30 +75,35 @@ public class AITankController {
         switch (randomNumber){
 
             case 0 -> {
-                tank.dx = 0;
-                tank.dy = 0;
+                tank.setDx(0);
+                tank.setDy(0);
             }
             case 1 -> {
-                tank.dx = -speed;
-                tank.dy = 0;
+                tank.setDx(-speed);
+                tank.setDy(0);
                 tank.setDirection(Direction.LEFT);
             }
             case 2 -> {
-                tank.dx = 0;
-                tank.dy = -speed;
+                tank.setDx(0);
+                tank.setDy(-speed);
                 tank.setDirection(Direction.UP);
             }
             case 3 -> {
-                tank.dx = speed;
-                tank.dy = 0;
+                tank.setDx(speed);
+                tank.setDy(0);
                 tank.setDirection(Direction.RIGHT);
             }
             case 4 -> {
-                tank.dx = 0;
-                tank.dy = speed;
+                tank.setDx(0);
+                tank.setDy(speed);
                 tank.setDirection(Direction.DOWN);
             }
+            default -> throw new IllegalStateException("Unexpected value: " + randomNumber);
         }
 
+    }
+
+    public int getnTanksToSpawn() {
+        return nTanksToSpawn;
     }
 }

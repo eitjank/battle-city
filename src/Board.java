@@ -5,12 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
-    private final int DELAY = 10;
+    private static final int DELAY = 10;
     private Image tankImageUp;
     private Image tankImageDown;
     private Image tankImageLeft;
@@ -33,7 +34,7 @@ public class Board extends JPanel implements ActionListener {
     private static final int PLAYER_SPAWN_X = 8 * 26;
     private static final int PLAYER_SPAWN_Y = 16 * 26;
     private static final int TANKS_LEFT_ROW_WIDTH = 4;
-    private ArrayList<Tank> enemyTanks;
+    private List<Tank> enemyTanks;
     private AITankController aiTankController;
     private Map map;
     private boolean gameOver = false;
@@ -46,6 +47,7 @@ public class Board extends JPanel implements ActionListener {
 
         loadImages();
 
+        map = Map.getInstance();
         resetTanksAndMap();
 
         timer = new Timer(DELAY, this);
@@ -59,7 +61,7 @@ public class Board extends JPanel implements ActionListener {
         enemyTanks.add(new Tank(60, 50, 52, 52, 2, PlayerType.Computer));
         enemyTanks.add(new Tank(100, 200, 52, 52, 2, PlayerType.Computer));
 
-        map = new Map();
+        map.resetMap();
 
         aiTankController = new AITankController(enemyTanks);
 
@@ -100,30 +102,30 @@ public class Board extends JPanel implements ActionListener {
             }
 
             g.setColor(Color.white);
-            for (Missile missile : tank.missiles) {
-                g.fillRect(missile.x, missile.y, Missile.size, Missile.size);
+            for (Missile missile : tank.getMissiles()) {
+                g.fillRect(missile.getX(), missile.getY(), Missile.SIZE, Missile.SIZE);
             }
 
         }
 
-        for (var obstacle : map.obstacles) {
-            switch (obstacle.type) {
+        for (var obstacle : map.getObstacles()) {
+            switch (obstacle.getType()) {
 
-                case Destructible -> {
-                    g.drawImage(bricksImage, obstacle.x, obstacle.y, null);
+                case DESTRUCTIBLE -> {
+                    g.drawImage(bricksImage, obstacle.getX(), obstacle.getY(), null);
                 }
-                case Indestructible -> {
-                    g.drawImage(steelBricksImage, obstacle.x, obstacle.y, null);
+                case INDESTRUCTIBLE -> {
+                    g.drawImage(steelBricksImage, obstacle.getX(), obstacle.getY(), null);
                 }
-                case PlayerBase -> {
-                    g.drawImage(phoenixImage, obstacle.x, obstacle.y, null);
+                case PLAYER_BASE -> {
+                    g.drawImage(phoenixImage, obstacle.getX(), obstacle.getY(), null);
                 }
             }
         }
 
         g.setColor(Color.white);
-        for (var missile : playerTank.missiles) {
-            g.fillRect(missile.x, missile.y, Missile.size, Missile.size);
+        for (var missile : playerTank.getMissiles()) {
+            g.fillRect(missile.getX(), missile.getY(), Missile.SIZE, Missile.SIZE);
         }
 
         if (gameWon) {
@@ -140,7 +142,7 @@ public class Board extends JPanel implements ActionListener {
         }
 
         g.drawString("Tanks left:", 610, 200);
-        for (int i = 0; i < aiTankController.nTanksToSpawn + enemyTanks.size(); i++) {
+        for (int i = 0; i < aiTankController.getnTanksToSpawn() + enemyTanks.size(); i++) {
             g.drawImage(enemyTankLivesImage, 605 + 30 * (i % TANKS_LEFT_ROW_WIDTH),
                     210 + 30 * (i / TANKS_LEFT_ROW_WIDTH), null);
         }
@@ -153,28 +155,28 @@ public class Board extends JPanel implements ActionListener {
         if (gameOver) {
             return;
         }
-        if (aiTankController.nTanksToSpawn + enemyTanks.size() == 0) {
+        if (aiTankController.getnTanksToSpawn() + enemyTanks.size() == 0) {
             gameWon = true;
         }
-        int playerLastX = playerTank.x;
-        int playerLastY = playerTank.y;
+        int playerLastX = playerTank.getX();
+        int playerLastY = playerTank.getY();
 
         playerTank.move();
         playerTank.update();
 
         Rectangle playerRect = playerTank.getBounds();
 
-        for (var obstacle : map.obstacles) {
+        for (var obstacle : map.getObstacles()) {
             if (playerRect.intersects(obstacle.getBounds())) {
-                playerTank.x = playerLastX;
-                playerTank.y = playerLastY;
+                playerTank.setX(playerLastX);
+                playerTank.setY(playerLastY);
             }
         }
 
         for (var tank : enemyTanks) {
             if (playerRect.intersects(tank.getBounds())) {
-                playerTank.x = playerLastX;
-                playerTank.y = playerLastY;
+                playerTank.setX(playerLastX);
+                playerTank.setY(playerLastY);
             }
         }
 
@@ -183,46 +185,44 @@ public class Board extends JPanel implements ActionListener {
 
         enemyTanks.forEach(c -> {
             c.update();
-            int xLast = c.x;
-            int yLast = c.y;
+            int xLast = c.getX();
+            int yLast = c.getY();
             c.move();
             Rectangle tankRect = c.getBounds();
-            for (var obstacle : map.obstacles) {
+            for (var obstacle : map.getObstacles()) {
                 if (tankRect.intersects(obstacle.getBounds())) {
-                    c.x = xLast;
-                    c.y = yLast;
-                    c.dx = 0;
-                    c.dy = 0;
+                    c.setX(xLast);
+                    c.setY(yLast);
+                    c.setDx(0);
+                    c.setDy(0);
                 }
             }
             enemyTanks.forEach(t -> {
-                if (c != t) {
-                    if (tankRect.intersects(t.getBounds())) {
-                        c.x = xLast;
-                        c.y = yLast;
-                        c.dx = 0;
-                        c.dy = 0;
-                    }
+                if (c != t && tankRect.intersects(t.getBounds())) {
+                    c.setX(xLast);
+                    c.setY(yLast);
+                    c.setDx(0);
+                    c.setDy(0);
                 }
             });
             if (tankRect.intersects(playerRect)) {
-                c.x = xLast;
-                c.y = yLast;
-                c.dx = 0;
-                c.dy = 0;
+                c.setX(xLast);
+                c.setY(yLast);
+                c.setDx(0);
+                c.setDy(0);
             }
 
             ArrayList<Obstacle> obstaclesToBeRemoved = new ArrayList<>();
             ArrayList<Missile> missilesToBeRemoved = new ArrayList<>();
 
-            c.missiles.forEach(Missile::move);
-            c.missiles.forEach(m -> {
+            c.getMissiles().forEach(Missile::move);
+            c.getMissiles().forEach(m -> {
                 Rectangle missileRect = m.getBounds();
-                map.obstacles.forEach(o -> {
+                map.getObstacles().forEach(o -> {
                     if (missileRect.intersects(o.getBounds())) {
-                        if (o.type == ObstacleType.Destructible) {
+                        if (o.getType() == ObstacleType.DESTRUCTIBLE) {
                             obstaclesToBeRemoved.add(o);
-                        } else if (o.type == ObstacleType.PlayerBase) {
+                        } else if (o.getType() == ObstacleType.PLAYER_BASE) {
                             obstaclesToBeRemoved.add(o);
                             gameOver = true;
                         }
@@ -249,16 +249,16 @@ public class Board extends JPanel implements ActionListener {
                     }
                 }
             });
-            c.missiles.removeAll(missilesToBeRemoved);
-            map.obstacles.removeAll(obstaclesToBeRemoved);
+            c.getMissiles().removeAll(missilesToBeRemoved);
+            map.getObstacles().removeAll(obstaclesToBeRemoved);
         });
 
-        playerTank.missiles.forEach(Missile::move);
+        playerTank.getMissiles().forEach(Missile::move);
 
         ArrayList<Tank> tanksToBeRemoved = new ArrayList<>();
         ArrayList<Missile> missilesToBeRemoved = new ArrayList<>();
 
-        for (var missile : playerTank.missiles) {
+        for (var missile : playerTank.getMissiles()) {
             Rectangle missileRect = missile.getBounds();
             for (var tank : enemyTanks) {
                 if (missileRect.intersects(tank.getBounds())) {
@@ -268,19 +268,19 @@ public class Board extends JPanel implements ActionListener {
             }
         }
         enemyTanks.removeAll(tanksToBeRemoved);
-        playerTank.missiles.removeAll(missilesToBeRemoved);
+        playerTank.getMissiles().removeAll(missilesToBeRemoved);
 
         ArrayList<Obstacle> obstaclesToBeRemoved = new ArrayList<>();
         missilesToBeRemoved = new ArrayList<>();
 
-        for (var missile : playerTank.missiles) {
+        for (var missile : playerTank.getMissiles()) {
             Rectangle missileRect = missile.getBounds();
-            for (var obstacle : map.obstacles) {
+            for (var obstacle : map.getObstacles()) {
 
                 if (missileRect.intersects(obstacle.getBounds())) {
-                    if (obstacle.type == ObstacleType.Destructible) {
+                    if (obstacle.getType() == ObstacleType.DESTRUCTIBLE) {
                         obstaclesToBeRemoved.add(obstacle);
-                    } else if (obstacle.type == ObstacleType.PlayerBase) {
+                    } else if (obstacle.getType() == ObstacleType.PLAYER_BASE) {
                         obstaclesToBeRemoved.add(obstacle);
                         gameOver = true;
                     }
@@ -288,8 +288,8 @@ public class Board extends JPanel implements ActionListener {
                 }
             }
         }
-        map.obstacles.removeAll(obstaclesToBeRemoved);
-        playerTank.missiles.removeAll(missilesToBeRemoved);
+        map.getObstacles().removeAll(obstaclesToBeRemoved);
+        playerTank.getMissiles().removeAll(missilesToBeRemoved);
 
 
         repaint();
@@ -340,12 +340,10 @@ public class Board extends JPanel implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (gameOver || gameWon) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    resetTanksAndMap();
-                    gameOver = false;
-                    gameWon = false;
-                }
+            if ((gameOver || gameWon) && e.getKeyCode() == KeyEvent.VK_ENTER) {
+                resetTanksAndMap();
+                gameOver = false;
+                gameWon = false;
             }
             playerTank.keyPressed(e);
         }
