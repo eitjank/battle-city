@@ -1,3 +1,7 @@
+package main;
+
+import java.awt.*;
+
 public class Missile extends GameObject {
     private int dx;
     private int dy;
@@ -12,6 +16,11 @@ public class Missile extends GameObject {
     public void move() {
         x += dx;
         y += dy;
+    }
+
+    public void draw(Graphics g){
+        g.setColor(Color.white);
+        g.fillRect(x, y, width, height);
     }
 
 }
