@@ -1,8 +1,6 @@
-package main.tanks;
+package battleCity.entities;
 
-import main.GameObject;
-import main.Missile;
-import main.enums.Direction;
+import battleCity.enums.Direction;
 
 import java.awt.*;
 
@@ -50,6 +48,9 @@ public abstract class Tank extends GameObject {
     }
 
     public Missile fire() {
+        if(!canFire()){
+            return null;
+        }
         int missileDx;
         int missileDy;
         int[] center = getCenter();
@@ -91,8 +92,16 @@ public abstract class Tank extends GameObject {
         this.dx = dx;
     }
 
+    public int getDx() {
+        return dx;
+    }
+
     public void setDy(int dy) {
         this.dy = dy;
+    }
+
+    public int getDy() {
+        return dy;
     }
 
     public int getSpeed() {
@@ -101,6 +110,10 @@ public abstract class Tank extends GameObject {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 
     public void draw(Graphics g) {

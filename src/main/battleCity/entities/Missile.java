@@ -1,4 +1,4 @@
-package main;
+package battleCity.entities;
 
 import java.awt.*;
 

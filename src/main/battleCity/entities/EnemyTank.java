@@ -1,9 +1,9 @@
-package main.tanks;
+package battleCity.entities;
 
-import main.commands.MoveDownCommand;
-import main.commands.MoveLeftCommand;
-import main.commands.MoveRightCommand;
-import main.commands.MoveUpCommand;
+import battleCity.commands.MoveDownCommand;
+import battleCity.commands.MoveLeftCommand;
+import battleCity.commands.MoveRightCommand;
+import battleCity.commands.MoveUpCommand;
 
 import java.awt.*;
 import java.util.Random;

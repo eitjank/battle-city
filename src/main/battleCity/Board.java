@@ -1,12 +1,9 @@
-package main;
+package battleCity;
 
-import main.commands.*;
-import main.enums.Direction;
-import main.enums.ObstacleType;
-import main.tanks.EnemyTank;
-import main.tanks.EnemyTankSpawner;
-import main.tanks.PlayerTank;
-import main.tanks.Tank;
+import battleCity.commands.*;
+import battleCity.enums.Direction;
+import battleCity.enums.ObstacleType;
+import battleCity.entities.*;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,8 +1,8 @@
-package main.tanks;
+package battleCity.entities;
 
 import java.awt.*;
 
-public class PlayerTank extends Tank{
+public class PlayerTank extends Tank {
 
     private int lives = 3;
 

@@ -1,4 +1,4 @@
-package main.enums;
+package battleCity.enums;
 
 public enum Direction {
     LEFT,

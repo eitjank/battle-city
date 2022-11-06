@@ -1,7 +1,7 @@
-package main.tanks;
+package battleCity.entities;
 
-import main.Board;
-import main.Map;
+import battleCity.Board;
+import battleCity.Map;
 
 import java.awt.*;
 import java.util.List;
@@ -24,7 +24,7 @@ public class EnemyTankSpawner {
             {19 * Map.OBSTACLE_SIZE, Map.OBSTACLE_SIZE},
     };
 
-    public EnemyTankSpawner(List<Tank> tanks, Image[] tankImages) {
+    public EnemyTankSpawner(List<battleCity.entities.Tank> tanks, Image[] tankImages) {
         this.tanks = tanks;
         this.tankImages = tankImages;
     }
@@ -41,7 +41,7 @@ public class EnemyTankSpawner {
                 int randomNumber = random.nextInt(4);
                 int spawnX = SPAWN_POSITIONS[randomNumber][0];
                 int spawnY = SPAWN_POSITIONS[randomNumber][1];
-                tanks.add(new EnemyTank(spawnX, spawnY, Board.TANK_WIDTH, Board.TANK_HEIGHT, Board.TANK_SPEED, tankImages));
+                tanks.add(new battleCity.entities.EnemyTank(spawnX, spawnY, Board.TANK_WIDTH, Board.TANK_HEIGHT, Board.TANK_SPEED, tankImages));
                 numberOfTanksToSpawn--;
             }
         }

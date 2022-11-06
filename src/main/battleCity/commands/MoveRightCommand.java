@@ -1,7 +1,8 @@
-package main.commands;
+package battleCity.commands;
 
-import main.tanks.Tank;
-import main.enums.Direction;
+
+import battleCity.enums.Direction;
+import battleCity.entities.Tank;
 
 public class MoveRightCommand implements Command {
     private Tank tank;

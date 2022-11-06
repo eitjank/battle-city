@@ -1,6 +1,6 @@
-package main;
+package battleCity.entities;
 
-import main.enums.ObstacleType;
+import battleCity.enums.ObstacleType;
 
 import java.awt.*;
 

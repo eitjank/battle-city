@@ -1,7 +1,7 @@
-package main.commands;
+package battleCity.commands;
 
-import main.Missile;
-import main.tanks.Tank;
+import battleCity.entities.Missile;
+import battleCity.entities.Tank;
 
 import java.util.List;
 
