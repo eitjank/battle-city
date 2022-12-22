@@ -11,15 +11,15 @@ public class Map {
 
     public static final int OBSTACLE_SIZE = 26;
     private static final int PLAYER_BASE_SIZE = OBSTACLE_SIZE * 2;
-    private List<Obstacle> obstacles = new ArrayList<>();
+    private final List<Obstacle> obstacles = new ArrayList<>();
     private static Map mapObject;
     private static final int[][] MATRIX = {
             {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+            {2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-            {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-            {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+            {2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
             {2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 2},
             {2, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 2},
@@ -38,8 +38,17 @@ public class Map {
     private static final int BRICKS_NUMBER = 1;
     private static final int STEEL_BRICKS_NUMBER = 2;
     private static final int PLAYER_BASE_NUMBER = 3;
+    private static final int ENEMY_TANK_SPAWN_NUMBER = 4;
+    public static final List<int[]> ENEMY_SPAWN_POSITIONS = new ArrayList<>();
 
     private Map() {
+        for (int i = 0; i < MATRIX.length; i++) {
+            for (int j = 0; j < MATRIX[i].length; j++) {
+                if (MATRIX[i][j] == ENEMY_TANK_SPAWN_NUMBER) {
+                    ENEMY_SPAWN_POSITIONS.add(new int[]{j * OBSTACLE_SIZE, i * OBSTACLE_SIZE});
+                }
+            }
+        }
     }
 
     public static Map getInstance() {

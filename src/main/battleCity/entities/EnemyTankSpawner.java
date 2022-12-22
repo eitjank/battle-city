@@ -1,11 +1,12 @@
 package battleCity.entities;
 
 import battleCity.Board;
-import battleCity.Map;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Random;
+
+import static battleCity.Map.ENEMY_SPAWN_POSITIONS;
 
 public class EnemyTankSpawner {
 
@@ -17,12 +18,6 @@ public class EnemyTankSpawner {
     private static final int SPAWN_COOLDOWN = 50;
     private int currentSpawnCooldown = SPAWN_COOLDOWN;
     private final Image[] tankImages;
-    public static final int[][] SPAWN_POSITIONS = {
-            {Map.OBSTACLE_SIZE, Map.OBSTACLE_SIZE},
-            {8 * Map.OBSTACLE_SIZE, Map.OBSTACLE_SIZE},
-            {Map.OBSTACLE_SIZE, 8 * Map.OBSTACLE_SIZE},
-            {19 * Map.OBSTACLE_SIZE, Map.OBSTACLE_SIZE},
-    };
 
     public EnemyTankSpawner(List<battleCity.entities.Tank> tanks, Image[] tankImages) {
         this.tanks = tanks;
@@ -39,8 +34,8 @@ public class EnemyTankSpawner {
             currentSpawnCooldown = SPAWN_COOLDOWN;
             if (random.nextInt(2) == 1) {
                 int randomNumber = random.nextInt(4);
-                int spawnX = SPAWN_POSITIONS[randomNumber][0];
-                int spawnY = SPAWN_POSITIONS[randomNumber][1];
+                int spawnX = ENEMY_SPAWN_POSITIONS.get(randomNumber)[0];
+                int spawnY = ENEMY_SPAWN_POSITIONS.get(randomNumber)[1];
                 if(isTankSpawnOccupied(spawnX, spawnY)){
                     return;
                 }

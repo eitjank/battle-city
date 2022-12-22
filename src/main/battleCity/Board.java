@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static battleCity.Map.ENEMY_SPAWN_POSITIONS;
+
 
 public class Board extends JPanel implements ActionListener {
 
@@ -70,10 +72,10 @@ public class Board extends JPanel implements ActionListener {
 
         tanks.add(playerTank);
 
-        tanks.add(new EnemyTank(EnemyTankSpawner.SPAWN_POSITIONS[0][0],
-                EnemyTankSpawner.SPAWN_POSITIONS[0][1], TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, enemyTankImages));
-        tanks.add(new EnemyTank(EnemyTankSpawner.SPAWN_POSITIONS[1][0],
-                EnemyTankSpawner.SPAWN_POSITIONS[1][1], TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, enemyTankImages));
+        tanks.add(new EnemyTank(ENEMY_SPAWN_POSITIONS.get(0)[0],
+                ENEMY_SPAWN_POSITIONS.get(0)[1], TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, enemyTankImages));
+        tanks.add(new EnemyTank(ENEMY_SPAWN_POSITIONS.get(1)[0],
+                ENEMY_SPAWN_POSITIONS.get(1)[1], TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, enemyTankImages));
 
         map.resetMap(bricksImage, steelBricksImage, phoenixImage);
 
