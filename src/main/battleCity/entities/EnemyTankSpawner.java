@@ -11,7 +11,7 @@ public class EnemyTankSpawner {
 
     private int numberOfTanksToSpawn = 18;
     private static final int MAX_TANKS = 4;
-    private List<Tank> tanks;
+    private final List<Tank> tanks;
     private final Random random = new Random();
 
     private static final int SPAWN_COOLDOWN = 50;
@@ -41,10 +41,22 @@ public class EnemyTankSpawner {
                 int randomNumber = random.nextInt(4);
                 int spawnX = SPAWN_POSITIONS[randomNumber][0];
                 int spawnY = SPAWN_POSITIONS[randomNumber][1];
+                if(isTankSpawnOccupied(spawnX, spawnY)){
+                    return;
+                }
                 tanks.add(new battleCity.entities.EnemyTank(spawnX, spawnY, Board.TANK_WIDTH, Board.TANK_HEIGHT, Board.TANK_SPEED, tankImages));
                 numberOfTanksToSpawn--;
             }
         }
+    }
+
+    private boolean isTankSpawnOccupied(int spawnX, int spawnY) {
+        for(Tank tank : tanks) {
+            if (new Rectangle(spawnX, spawnY, Board.TANK_WIDTH, Board.TANK_HEIGHT).intersects(tank.getBounds())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getNumberOfTanksToSpawn() {
